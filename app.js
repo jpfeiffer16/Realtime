@@ -8,6 +8,9 @@ var express = require('express'),
 //Start the web socket
 require('./app/modules/websocket.js');
 
+//Start the game enginw
+require('./app/modules/game.js')
+
 // mongoose.connect(config.db);
 // var db = mongoose.connection;
 // db.on('error', function () {
