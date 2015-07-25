@@ -10,11 +10,26 @@ module.exports = (function () {
 				// world.render();
 				// console.log('stepping');
 				
-				console.log(world.getBodies());
+				// console.log(world.getBodies());
+				//construct the reduced-body array:
+				var bodies = world.getBodies(),
+					reducedBodies = [];
+				
+				for (var i = 0; i < bodies.length; i ++) {
+					var body = bodies[i];
+					var pos = body.state.pos;
+					var obj = {
+						x: pos._[0],
+						y: pos._[1]
+					};
+					reducedBodies.push(obj);
+					console.log(obj);
+				}
+				
 				
 				//do send logic:
 				// Connection.send(JSON.stringify(world.getBodies()));
-				socket.send('Test');
+				socket.send(reducedBodies);
 			});
 			
 			world.add( Physics.body('circle', {
@@ -41,7 +56,7 @@ module.exports = (function () {
 			
 			setInterval(function() {
 				world.step();
-			}, 100);
+			}, 400);
 			
 			// world.unpause();
 		});
