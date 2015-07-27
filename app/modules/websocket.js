@@ -16,7 +16,7 @@ module.exports = (function () {
 			server = engine.listen(port);
 			
 			server.on('connection', function(socket) {
-				socket.send('connected');
+				// socket.send('connected');
 				// that.send = socket.send;
 				// connected = true;
 				// webSocket = socket;
