@@ -5,7 +5,7 @@ module.exports = (function () {
 	Connection.start(2999, function(socket) {
 		Physics(function(world){
 			var viewportBounds = Physics.aabb(0, 0, 400, 400);
-			console.log('it appears to be working. (physics.js)');
+			// console.log('it appears to be working. (physics.js)');
 			world.on('step', function() {
 				// world.render();
 				// console.log('stepping');
@@ -91,40 +91,45 @@ module.exports = (function () {
 				world.step();
 			}, 10);
 			setInterval(function() {
-				var bodies = world.getBodies(),
-					reducedBodies = [];
-				
-				for (var i = 0; i < bodies.length; i ++) {
-					var body = bodies[i];
-					var pos = body.state.pos;
-					if (body.radius != undefined) {
-						//It's a circle
-						var obj = {
-							objType: 'circle',
-							radius: body.radius,
-							x: pos._[0],
-							y: pos._[1]
-						};
-					} else {
-						//Render it as a rect
-						var obj = {
-							objType: 'rect',
-							width: body.width,
-							height: body.height,
-							x: pos._[0],
-							y: pos._[1]
-						};
+				setTimeout(function() {
+					var bodies = world.getBodies(),
+						reducedBodies = [];
+					
+					for (var i = 0; i < bodies.length; i ++) {
+						var body = bodies[i];
+						// if (i == 1) {
+						// 	console.dir(body);
+						// }
+						var pos = body.state.pos;
+						if (body.radius != undefined) {
+							//It's a circle
+							var obj = {
+								objType: 'circle',
+								radius: body.radius,
+								x: pos._[0],
+								y: pos._[1],
+								uid: body.uid
+							};
+						} else {
+							//Send it as a rect
+							var obj = {
+								objType: 'rect',
+								width: body.width,
+								height: body.height,
+								x: pos._[0],
+								y: pos._[1],
+								uid: body.uid
+							};
+						}
+						
+						reducedBodies.push(obj);
 					}
 					
-					reducedBodies.push(obj);
-				}
-				
-				
-				//do send logic:
-				socket.send(JSON.stringify(reducedBodies));
+					
+					//do send logic:
+					Connection.sendToAllClients(JSON.stringify(reducedBodies));
+				}, 0);
 			}, 100);
-			
-			// world.unpause();
 		});
 	});
 })();

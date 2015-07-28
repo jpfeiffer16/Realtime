@@ -1,7 +1,9 @@
 module.exports = (function () {
 	
 	var engine, server, webSocket, connected = false, that = this;
-		
+	
+	var clients = [];
+	
 	var send = function(data) {
 		if (webSocket) {
 			webSocket.send(data);
@@ -30,7 +32,10 @@ module.exports = (function () {
 				// 		that.onClose();
 				// 	}
 				// });
-				callback(socket);
+				clients.push(socket);
+				if (clients.length == 1	) {
+					callback(socket);
+				}
 			});
 		}
 	};
@@ -54,12 +59,20 @@ module.exports = (function () {
 	// };
 	
 	
+	var sendToAllClients = function(data) {
+		for (var i = 0; i < clients.length; i++) {
+			var client = clients[i];
+			client.send(data);
+		}
+	};
+	
 	return {
 		onData: onData,
 		onClose: onClose,
 		send: send,
 		start: start,
-		stop: stop
+		stop: stop,
+		sendToAllClients: sendToAllClients
 	};
 	
 })();
