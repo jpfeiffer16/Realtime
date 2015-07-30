@@ -39,18 +39,24 @@ socket.on('open', function(){
   Physics(function(world) {
     
     var renderer = Physics.renderer('pixi', {
-      el: 'viewport'
+      el: 'viewport',
+      width: 400,
+      height: 400
     });
     
     world.add(renderer);
     
-    
+    world.on('step', function() {
+      world.render();
+      // console.log('rendering');
+    });
     
     
     
     
     Physics.util.ticker.on(function( time ) {
         world.step( time );
+        // console.log('stepping');
     });
     
     
@@ -75,12 +81,16 @@ socket.on('open', function(){
               x: body.x,
               y: body.y,
               width: body.width,
-              height: body.height
+              height: body.height,
+              treatment: 'static'
             }));
+            console.log('adding rect');
           } else {
             //Update the body
-            exists.x = body.x;
-            exists.y = body.y;
+            var thisBody = exists[0];
+            thisBody.state.pos.x = body.x;
+            thisBody.state.pos.y = body.y;  
+            thisBody.state.angular.pos = body.angle;
           }
         } else {
           var exists = checkExists(body.uid);
@@ -89,12 +99,18 @@ socket.on('open', function(){
             world.add(Physics.body('circle', {
               x: body.x,
               y: body.y,
-              radiius: body.radius
+              radius: body.radius,
+              treatment: 'static'
             }));
+            console.log('adding circle at ' + body.x + ", " + body.y + ", radius:" + body.radius);
           } else {
             //Update the body
-            exists.x = body.x;
-            exists.y = body.y;
+            var thisBody = exists[0];
+            thisBody.state.pos.x = body.x;
+            thisBody.state.pos.y = body.y;  
+            thisBody.state.angular.pos = body.angle;
+            // console.log('Updating circle ' + body.uid);
+            // console.log(thisBody.state.pos.x, thisBody.state.pos.y);
           }
         }
 

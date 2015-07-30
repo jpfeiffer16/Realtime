@@ -51,22 +51,49 @@ module.exports = (function () {
 		    //     }
 		    // }));
 			
-			for (var i = 0; i < 200; i = i + 10) {
-				for (var j = 0; j < 200; j = j + 10) {
-					world.add( Physics.body('circle', {
-				        x: j
-				        ,y: i
-				        ,vx: 1
-				        ,radius: 3
-						,mass: 1
-						,restitution: .5
-				        ,styles: {
-				            fillStyle: '#cb4b16'
-				            ,angleIndicator: '#72240d'
-				        }
-				    }));
-				}
-			}
+			// for (var i = 0; i < 200; i = i + 10) {
+			// 	for (var j = 0; j < 200; j = j + 10) {
+			// 		world.add( Physics.body('circle', {
+			// 	        x: j
+			// 	        ,y: i
+			// 	        ,vx: 1
+			// 	        ,radius: 3
+			// 			,mass: 1
+			// 			,restitution: .5
+			// 	        ,styles: {
+			// 	            fillStyle: '#cb4b16'
+			// 	            ,angleIndicator: '#72240d'
+			// 	        }
+			// 	    }));
+			// 	}
+			// }
+			
+			world.add( Physics.body('circle', {
+		        x: 50
+		        ,y: 50
+		        ,vx: 1
+		        ,radius: 30
+				,mass: 1
+				,restitution: .5
+		        ,styles: {
+		            fillStyle: '#cb4b16'
+		            ,angleIndicator: '#72240d'
+		        }
+		    }));
+			
+			world.add( Physics.body('rectangle', {
+		        x: 90
+		        ,y: 50
+		        ,vx: 0
+		        ,width: 10
+				,height: 100
+				,mass: 1
+				,restitution: .5
+		        ,styles: {
+		            fillStyle: '#cb4b16'
+		            // ,angleIndicator: '#72240d'
+		        }
+		    }));
 			
 			var edgeBounce = Physics.behavior('edge-collision-detection', {
 	            aabb: viewportBounds
@@ -108,6 +135,7 @@ module.exports = (function () {
 								radius: body.radius,
 								x: pos._[0],
 								y: pos._[1],
+								angle: body.state.angular.pos,
 								uid: body.uid
 							};
 						} else {
@@ -118,6 +146,7 @@ module.exports = (function () {
 								height: body.height,
 								x: pos._[0],
 								y: pos._[1],
+								angle: body.state.angular.pos,
 								uid: body.uid
 							};
 						}
