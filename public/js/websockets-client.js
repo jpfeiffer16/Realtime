@@ -65,57 +65,63 @@ socket.on('open', function(){
       // renderSet.clear();
       
       //Render info:
-      var bodies = JSON.parse(data);
-      for (var i = 0; i < bodies.length; i++) {
-        var body = bodies[i];
-        // renderSet.lineStyle(2, 0xFF00FF, 1);
-        // renderSet.beginFill(0xFF00BB, 0.25);
-        
-        // var geoType = body.objType == 'rect' ? 'recttangle'
-        if (body.objType == 'rect') {
-          //It's a rect
-          var exists = checkExists(body.uid);
-          if (!exists) {
-            //insert the body
-            world.add(Physics.body('rectangle', {
-              x: body.x,
-              y: body.y,
-              width: body.width,
-              height: body.height,
-              treatment: 'static'
-            }));
-            console.log('adding rect');
-          } else {
-            //Update the body
-            var thisBody = exists[0];
-            thisBody.state.pos.x = body.x;
-            thisBody.state.pos.y = body.y;  
-            thisBody.state.angular.pos = body.angle;
-          }
-        } else {
-          var exists = checkExists(body.uid);
-          if (!exists) {
-            //insert the body
-            world.add(Physics.body('circle', {
-              x: body.x,
-              y: body.y,
-              radius: body.radius,
-              treatment: 'static'
-            }));
-            console.log('adding circle at ' + body.x + ", " + body.y + ", radius:" + body.radius);
-          } else {
-            //Update the body
-            var thisBody = exists[0];
-            thisBody.state.pos.x = body.x;
-            thisBody.state.pos.y = body.y;  
-            thisBody.state.angular.pos = body.angle;
-            // console.log('Updating circle ' + body.uid);
-            // console.log(thisBody.state.pos.x, thisBody.state.pos.y);
-          }
-        }
-
-      }
+      var parsedData = JSON.parse(data);
+      var eventType = parsedData.EventType;
       
+      
+      if (eventType = 'render') {
+      
+        var bodies = parsedData.data;
+        for (var i = 0; i < bodies.length; i++) {
+          var body = bodies[i];
+          // renderSet.lineStyle(2, 0xFF00FF, 1);
+          // renderSet.beginFill(0xFF00BB, 0.25);
+          
+          // var geoType = body.objType == 'rect' ? 'recttangle'
+          if (body.objType == 'rect') {
+            //It's a rect
+            var exists = checkExists(body.uid);
+            if (!exists) {
+              //insert the body
+              world.add(Physics.body('rectangle', {
+                x: body.x,
+                y: body.y,
+                width: body.width,
+                height: body.height,
+                treatment: 'static'
+              }));
+              console.log('adding rect');
+            } else {
+              //Update the body
+              var thisBody = exists[0];
+              thisBody.state.pos.x = body.x;
+              thisBody.state.pos.y = body.y;  
+              thisBody.state.angular.pos = body.angle;
+            }
+          } else {
+            var exists = checkExists(body.uid);
+            if (!exists) {
+              //insert the body
+              world.add(Physics.body('circle', {
+                x: body.x,
+                y: body.y,
+                radius: body.radius,
+                treatment: 'static'
+              }));
+              console.log('adding circle at ' + body.x + ", " + body.y + ", radius:" + body.radius);
+            } else {
+              //Update the body
+              var thisBody = exists[0];
+              thisBody.state.pos.x = body.x;
+              thisBody.state.pos.y = body.y;  
+              thisBody.state.angular.pos = body.angle;
+              // console.log('Updating circle ' + body.uid);
+              // console.log(thisBody.state.pos.x, thisBody.state.pos.y);
+            }
+          }
+  
+        }
+      }
       function checkExists(uid) {
         var query = Physics.query({
           uid: uid

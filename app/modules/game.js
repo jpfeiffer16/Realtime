@@ -73,7 +73,7 @@ module.exports = (function () {
 		        ,y: 50
 		        ,vx: 1
 		        ,radius: 30
-				,mass: 1
+				,mass: 100
 				,restitution: .5
 		        ,styles: {
 		            fillStyle: '#cb4b16'
@@ -154,9 +154,10 @@ module.exports = (function () {
 						reducedBodies.push(obj);
 					}
 					
+					var mailObject = {eventType: 'render', data: reducedBodies};
 					
 					//do send logic:
-					Connection.sendToAllClients(JSON.stringify(reducedBodies));
+					Connection.sendToAllClients(JSON.stringify(mailObject));
 				}, 0);
 			}, 100);
 		});
