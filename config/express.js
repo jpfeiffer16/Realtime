@@ -11,7 +11,7 @@ var methodOverride = require('method-override');
 
 module.exports = function (app, config) {
   app.set('views', config.root + '/app/views');
-  app.set('view engine', 'swig');
+  app.set('view engine', 'jade');
 
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
