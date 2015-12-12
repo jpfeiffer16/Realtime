@@ -9,9 +9,9 @@ var compress = require('compression');
 var methodOverride = require('method-override');
 
 
-module.exports = function(app, config) {
+module.exports = function (app, config) {
   app.set('views', config.root + '/app/views');
-  app.set('view engine', 'jade');
+  app.set('view engine', 'swig');
 
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
@@ -38,8 +38,8 @@ module.exports = function(app, config) {
     err.status = 404;
     next(err);
   });
-  
-  if(app.get('env') === 'development'){
+
+  if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
       res.status(err.status || 500);
       res.render('error', {
@@ -52,11 +52,12 @@ module.exports = function(app, config) {
 
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-      res.render('error', {
-        message: err.message,
-        error: {},
-        title: 'error'
-      });
+    console.log(err.message);
+    res.render('error', {
+      message: err.message,
+      error: {},
+      title: 'error'
+    });
   });
 
 };

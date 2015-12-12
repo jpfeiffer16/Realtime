@@ -9,7 +9,7 @@ var express = require('express'),
 // require('./app/modules/websocket.js');
 
 //Start the game engine
-require('./app/modules/game.js')
+//require('./app/modules/game.js');
 
 // mongoose.connect(config.db);
 // var db = mongoose.connection;
@@ -23,7 +23,16 @@ models.forEach(function (model) {
 });
 var app = express();
 
+var io = require('engine.io')(app);
+
 require('./config/express')(app, config);
 
 app.listen(config.port);
+
+io.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
 
